@@ -34,6 +34,16 @@ Get into the folder of laravel.
 And you have to create a .env file copy the .env.example
 ```cp .env.example .env```
 
+You must update Database variables. As we are using docker, the database host must be mysql service name so...
+```DB_HOST=mysql```
+
+And be careful with database, user and password. You have to use same as defined in docker-compose.yml service of mysql. In this example is
+```
+DB_DATABASE=feriapp
+DB_USERNAME=root
+DB_PASSWORD=password
+```
+
 And if you want to use testing must add this variables.
 ```
 DB_HOST_TEST=mysql

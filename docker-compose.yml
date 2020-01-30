@@ -1,0 +1,33 @@
+version: "2"
+services:
+  php-fpm:
+    build: ./php-fpm
+    volumes:
+      - ./php-fpm/laravel:/app
+    links:
+      - mysql:mysql
+  
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./php-fpm/laravel:/app
+    ports:
+      - 8990:8080
+    links:
+      - php-fpm:php-fpm
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: feriapp
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8991:80
+    links:
+      - "mysql:db"

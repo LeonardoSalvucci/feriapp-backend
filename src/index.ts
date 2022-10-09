@@ -17,5 +17,7 @@ async function main() {
   httpServer.listen(port, () => displayServerURL(port));
 }
 
-main()
-  .catch(err => { console.error(err.stack); process.exit(1); });
+main().catch(err => {
+  console.error(err.stack);
+  process.exit(1);
+});

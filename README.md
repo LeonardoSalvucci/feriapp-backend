@@ -1,0 +1,1 @@
+# FeriAPP - Simple expo attendance helper

@@ -1,7 +1,7 @@
 import { Field, BaseDocument, Collection } from '../fireorm';
 
 @Collection
-export class User extends BaseDocument {
+export class Person extends BaseDocument {
   @Field()
   uid: string;
 
@@ -12,5 +12,5 @@ export class User extends BaseDocument {
   lastName: string;
 
   @Field()
-  email: string;
+  phone: number;
 }

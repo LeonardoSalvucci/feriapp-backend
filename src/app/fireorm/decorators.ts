@@ -7,11 +7,10 @@ import { BaseDocument } from './documents';
  *
  * @param constructor
  * @returns
- * Decorator to save the tollection of a document entity and it's constructor
+ * Decorator to save the collection of a document entity and it's constructor
  */
 export function Collection<T extends typeof BaseDocument>(constructor: T) {
   const collectionName = getConstructorPluralName(constructor);
-
   const fm = getFirestoreManager();
   const cm = fm.getCollectionManager();
   cm.setCollection(collectionName, constructor);

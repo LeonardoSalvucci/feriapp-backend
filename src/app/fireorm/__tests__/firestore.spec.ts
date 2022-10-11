@@ -1,24 +1,17 @@
 import { spy, type SinonSpy } from 'sinon';
-import { FirebaseApp } from 'firebase/app';
+
 import { strictEqual } from 'assert';
+import { FirebaseApp } from 'firebase/app';
 import { Firestore } from 'firebase/firestore';
 import { FirestoreManager } from '../firestore';
 import { CollectionManager } from '../collections';
-const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
-
-const initializeAppReturns: FirebaseApp = {
-  name: 'test',
-  options: {},
-  automaticDataCollectionEnabled: false,
-};
-
-const firestoreReturns: Firestore = {
-  type: 'firestore-lite',
-  app: initializeAppReturns,
-  toJSON: function (): object {
-    throw new Error('Function not implemented.');
-  },
-};
+import {
+  initializeAppReturns,
+  firestoreReturns,
+  mockInitializeFirebase,
+  firebaseModule,
+  firestoreModule,
+} from './helpers';
 
 describe('FirestoreManager', () => {
   // This is for "import" whole firebase.ts file with proxyquire
@@ -28,26 +21,13 @@ describe('FirestoreManager', () => {
   let initializeAppSpy: SinonSpy<[], FirebaseApp>;
   let getFirestoreSpy: SinonSpy<[], Firestore>;
 
-  // this represents the instance of firebase app after calling initializeApp
-  const firebase = {
-    initializeApp: () => initializeAppReturns,
-  };
-
-  // this represents the instance of firestore after calling getFirestore
-  const firestore = {
-    getFirestore: () => firestoreReturns,
-  };
-
   beforeEach(() => {
-    // We are using proxyquire to replace firebase/app and firebase/firestore libraries
-    firestoreManager = proxyquire('../firestore', {
-      'firebase/app': firebase,
-      'firebase/firestore': firestore,
-    });
-
     // Set Spies
-    initializeAppSpy = spy(firebase, 'initializeApp');
-    getFirestoreSpy = spy(firestore, 'getFirestore');
+    initializeAppSpy = spy(firebaseModule, 'initializeApp');
+    getFirestoreSpy = spy(firestoreModule, 'getFirestore');
+
+    // We have to declare proxyquire to have a fresh module every test
+    firestoreManager = mockInitializeFirebase('../firestore');
   });
 
   afterEach(() => {
@@ -85,12 +65,23 @@ describe('FirestoreManager', () => {
       strictEqual(getFirestoreSpy.calledOnce, true);
     });
 
-    it('getFirestoreManager retrieve a FirestoreManager instance', () => {
-      // Act - call firestore global getter
-      const fm = firestoreManager.getFirestoreManager();
+    describe('FirestoreManager instances', () => {
+      it('getFirestoreManager retrieve a FirestoreManager instance', () => {
+        // Act - call firestore global getter
+        const fm = firestoreManager.getFirestoreManager();
+
+        // Verify
+        strictEqual(fm !== undefined, true);
+      });
+    });
+
+    it('getFirestoreManager called twice retrieve same instance', () => {
+      // Act - call getFirestoreManager twice
+      const fm1 = firestoreManager.getFirestoreManager();
+      const fm2 = firestoreManager.getFirestoreManager();
 
       // Verify
-      strictEqual(fm !== undefined, true);
+      strictEqual(fm1, fm2);
     });
   });
 

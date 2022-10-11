@@ -77,8 +77,10 @@ export class FirestoreManager {
  * Function to instantiate and get FirestoreManager as a singleton pattern
  */
 export const initFirestore = () => {
-  firestoreManager = new FirestoreManager();
-  firestoreManager.initialize();
+  if (!firestoreManager) {
+    firestoreManager = new FirestoreManager();
+    firestoreManager.initialize();
+  }
 };
 
 /**

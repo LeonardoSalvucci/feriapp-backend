@@ -1,1 +1,12 @@
-# FeriAPP - Simple expo attendance helper
+# FeriAPP - Tiny expo attendance helper
+
+## Environment variables
+You have to create a .env file and add this variables:
+
+> FIREBASE_API_KEY=
+> FIREBASE_AUTH_DOMAIN=
+> FIREBASE_DATABASE_URL=
+> FIREBASE_PROJECT_ID=
+> FIREBASE_STORAGE_BUCKET=
+> FIREBASE_MESSAGING_SENDER_ID=
+> FIREBASE_APP_ID=

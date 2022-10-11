@@ -116,6 +116,8 @@ export class CollectionManager {
   ): Promise<T[]> {
     const colName = getConstructorPluralName(documentEntity);
     const documents: T[] = [];
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
     const snapshot = await getDocs<T>(this.getCollectionRef(colName));
     snapshot.forEach(doc => {
       documents.push(doc.data());
